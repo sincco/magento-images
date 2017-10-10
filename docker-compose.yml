@@ -1,0 +1,45 @@
+web:
+    image: sinccocom/magento-images:m2apachedev
+    ports:
+        - 80:80
+    volumes:
+        - ./src:/var/www/html
+        - ./log/nginx:/var/log/nginx
+        - ./log/php:/var/log/php-fpm
+        - ./build:/build/
+       # - ./log/magento/:/var/www/html/var/log/
+    environment:
+        - MAGENTO_USER=magento2
+        - MAGENTO_VERSION=project-community-edition=2.1.9
+        - MAGENTO_DEPLOY_MODE=developer
+        - MAGENTO_BASE_URL=http://magento2.dev/
+        - MAGENTO_BACKEND_FRONTNAME=admindev
+        - MAGENTO_TIMEZONE=America/Mexico_City
+        - MAGENTO_CURRENCY=MXN
+        - MAGENTO_LANGUAGE=es_MX
+        - MAGENTO_DB_HOST=mysql
+        - MAGENTO_DB_USERNAME=root
+        - MAGENTO_DB_PASSWORD=mysql
+        - MAGENTO_DB_NAME=magento2
+        - MAGENTO_ADMIN_USER=admindev
+        - MAGENTO_ADMIN_PASSWORD=4dm1nd3v#
+        - MAGENTO_ADMIN_EMAIL=magento2@magento2.dev
+    links:
+        - mysql
+    container_name: magento2dev-web
+    restart: always
+
+mysql:
+    image: mysql:5.7
+    volumes:
+        - ./db:/var/lib/mysql
+        - ./build:/build/
+        - ./sql:/docker-entrypoint-initdb.d/
+        - ./log/mysql:/var/log/mysql/
+    ports:
+      - 3306:3306
+    environment:
+        - MYSQL_ROOT_PASSWORD=mysql
+        - MYSQL_DATABASE=magento2
+    container_name: magento2dev-db
+    restart: always
