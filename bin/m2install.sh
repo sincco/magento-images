@@ -16,6 +16,14 @@ else
 	composer install
 	echo -e "${COLOR}Instalando Magento2..."
 	php bin/magento setup:install --admin-firstname=admin --admin-lastname=admin --admin-email=$MAGENTO_ADMIN_EMAIL --admin-user=$MAGENTO_ADMIN_USER --admin-password=$MAGENTO_ADMIN_PASSWORD --db-host=$MAGENTO_DB_HOST --db-name=$MAGENTO_DB_NAME --db-user=$MAGENTO_DB_USERNAME --db-password=$MAGENTO_DB_PASSWORD --currency=$MAGENTO_CURRENCY --timezone=$MAGENTO_TIMEZONE --language=$MAGENTO_LANGUAGE --base-url=$MAGENTO_BASE_URL --backend-frontname=$MAGENTO_BACKEND_FRONTNAME
+	echo -e "${COLOR}Instalando ObwHub..."
+	composer require obw/hub
+	composer require obw/backendtheme
+	cp /root/.composer/auth.json ./auth.json
+	chown root:www-data /var/www/html -Rf
+	echo -e "${COLOR}Activando ObwHub..."
+	php bin/magento module:enable Obw_Humboldt
+	php bin/magento setup:upgrade
 	find . -type d -exec chmod 770 {} \; &&  find . -type f -exec chmod 660 {} \; &&  chmod u+x bin/magento
 	chown root:www-data /var/www/html -Rf
 	chown www-data:www-data /var/www/html/var -Rf

@@ -10,11 +10,11 @@
 ### www.conf
 [ ! -z "${WEBSERVER_USER}" ] && sed -i "s/WEBSERVER_USER/${WEBSERVER_USER}/" /usr/local/etc/php-fpm.d/www.conf
 [ ! -z "${MAGENTO_DEPLOY_MODE}" ] && sed -i "s/MAGENTO_DEPLOY_MODE/${MAGENTO_DEPLOY_MODE}/" /usr/local/etc/php-fpm.d/www.conf
-### nginx.conf
-[ ! -z "${WEBSERVER_USER}" ] && sed -i "s/WEBSERVER_USER/${WEBSERVER_USER}/" /etc/nginx/nginx.conf
 ### default.conf
 [ ! -z "${SERVER_NAME}" ] && sed -i "s/SERVER_NAME/${SERVER_NAME}/" /etc/nginx/conf.d/default.conf 
 [ ! -z "${MAGENTO_DEPLOY_MODE}" ] && sed -i "s/MAGENTO_DEPLOY_MODE/${MAGENTO_DEPLOY_MODE}/" /etc/nginx/conf.d/default.conf 
+### m2install.sh
+[ ! -z "${MAGENTO_VERSION}" ] && sed -i "s/MAGENTO_VERSION/${MAGENTO_VERSION}/" /home/$MAGENTO_USER/m2install.sh
 ### magento.repo
 [ ! -z "${MAGENTO_REPO_PUBLIC_KEY}" ] && sed -i "s/MAGENTO_REPO_PUBLIC_KEY/${MAGENTO_REPO_PUBLIC_KEY}/" /home/$MAGENTO_USER/.composer/auth.json
 [ ! -z "${MAGENTO_REPO_PRIVATE_KEY}" ] && sed -i "s/MAGENTO_REPO_PRIVATE_KEY/${MAGENTO_REPO_PRIVATE_KEY}/" /home/$MAGENTO_USER/.composer/auth.json
