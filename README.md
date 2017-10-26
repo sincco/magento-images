@@ -40,7 +40,6 @@ web:
         - mysql
     container_name: <magento2-web>
     restart: always
-
 mysql:
     image: mysql:5.7
     volumes:
