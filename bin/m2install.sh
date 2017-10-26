@@ -1,4 +1,5 @@
 #!/bin/bash
+#
 COLOR='\033[0;35m'
 NC='\033[0m'
 file="/var/www/html/bin/magento"
@@ -8,31 +9,42 @@ then
 	echo -e "${COLOR}Magento ya está instalado."
 	echo -e "${COLOR}Ahora puedes accesar desde $MAGENTO_BASE_URL $MAGENTO_BACKEND_FRONTNAME${NC}"
 else
-	echo -e "${COLOR}Obteniendo Magento2..."
+	echo -e "${COLOR}Obteniendo Magento2...${NC}"
 	cd /var/www/html
-	composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition=2.1.9 .
+	composer create-project --repository-url=https://repo.magento.com/ magento/$MAGENTO_VERSION .
 	composer config secure-http false
 	composer config minimum-stability alpha
 	composer install
-	echo -e "${COLOR}Instalando Magento2..."
+	echo -e "${COLOR}Instalando Magento2...${NC}"
 	php bin/magento setup:install --admin-firstname=admin --admin-lastname=admin --admin-email=$MAGENTO_ADMIN_EMAIL --admin-user=$MAGENTO_ADMIN_USER --admin-password=$MAGENTO_ADMIN_PASSWORD --db-host=$MAGENTO_DB_HOST --db-name=$MAGENTO_DB_NAME --db-user=$MAGENTO_DB_USERNAME --db-password=$MAGENTO_DB_PASSWORD --currency=$MAGENTO_CURRENCY --timezone=$MAGENTO_TIMEZONE --language=$MAGENTO_LANGUAGE --base-url=$MAGENTO_BASE_URL --backend-frontname=$MAGENTO_BACKEND_FRONTNAME
-	echo -e "${COLOR}Instalando ObwHub..."
+	echo -e "${COLOR}Instalando ObwHub...${NC}"
 	composer require obw/hub
 	composer require obw/backendtheme
+	composer require obw/basictheme
+	composer require sincco/language-es_mx
 	cp /root/.composer/auth.json ./auth.json
 	chown root:www-data /var/www/html -Rf
-	echo -e "${COLOR}Activando ObwHub..."
-	php bin/magento module:enable Obw_Humboldt
+	echo -e "${COLOR}Activando ObwHub...${NC}"
+	php bin/magento module:enable Obw_Hub
+	echo -e "${COLOR}Configuraciones básicas...${NC}"
+	php bin/magento setup:store-config:set --use-rewrites=1 --language=es_MX
 	php bin/magento setup:upgrade
 	find . -type d -exec chmod 770 {} \; &&  find . -type f -exec chmod 660 {} \; &&  chmod u+x bin/magento
-	chown root:www-data /var/www/html -Rf
-	chown www-data:www-data /var/www/html/var -Rf
-	chmod 774 /var/www/html/var -Rf
-	#Soporte para ejecutar composer desde php
-	cp /root/composer_update* ./
-	chown root composer_update.sh
-	chmod u=rwx,go=xr composer_update.sh
-	chown root composer_update
-	chmod u=rwx,go=xr,+s composer_update
+	if [ "$MAGENTO_SAMPLE_DATA" == "yes" ]
+	then
+		echo -e "${COLOR}Cargando productos de ejemplo...${NC}"
+		php bin/magento sampledata:deploy
+		php bin/magento setup:upgrade
+	fi
+	if [ "$MAGENTO_DEPLOY_MODE" == "developers" ]
+	then
+		echo -e "${COLOR}Configurando Grunt...${NC}"
+		cp package.json.sample package.json
+		cp Gruntfile.js.sample Gruntfile.js
+		npm install
+		npm update
+	fi
+	echo -e "${COLOR}Estableciendo modo de trabajo...${NC}"
+	php bin/magento deploy:mode:set $MAGENTO_DEPLOY_MODE
 	echo -e "${COLOR}Ahora puedes accesar desde $MAGENTO_BASE_URL $MAGENTO_BACKEND_FRONTNAME${NC}"
 fi

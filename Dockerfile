@@ -108,7 +108,6 @@ RUN npm install -g express \
 
 RUN mkdir /home/magento2/.ssh \
     mkdir /home/magento2/.composer
-COPY keys/id_rsa /home/magento2/.ssh
 COPY keys/auth.json /home/magento2/.composer
 COPY keys/known_hosts /home/magento2/.ssh
 RUN chown magento2 /home/magento2/.ssh && \
