@@ -1,4 +1,4 @@
-# Docker images for Magento2
+# Imágenes Docker para Magento 2
 
 Estas imagenes convierten el largo [proceso de instalación](http://devdocs.magento.com/guides/v1.0/install-gde/bk-install-guide.html) de Magento 2 en imágenes simples de levantar.
 
