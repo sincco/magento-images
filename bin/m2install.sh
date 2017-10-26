@@ -27,7 +27,7 @@ else
 	echo -e "${COLOR}Activando ObwHub...${NC}"
 	php bin/magento module:enable Obw_Hub
 	echo -e "${COLOR}Configuraciones básicas...${NC}"
-	php bin/magento setup:store-config:set --use-rewrites=1 --language=es_MX
+	php bin/magento setup:store-config:set --use-rewrites=1 --language=$MAGENTO_LANGUAGE
 	php bin/magento setup:upgrade
 	find . -type d -exec chmod 770 {} \; &&  find . -type f -exec chmod 660 {} \; &&  chmod u+x bin/magento
 	if [ "$MAGENTO_SAMPLE_DATA" == "yes" ]
