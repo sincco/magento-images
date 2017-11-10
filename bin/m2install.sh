@@ -30,7 +30,14 @@ else
 	php bin/magento module:enable MagePal_GmailSmtpApp
 	echo -e "${COLOR}Configuraciones básicas...${NC}"
 	php bin/magento setup:store-config:set --use-rewrites=1 --language=$MAGENTO_LANGUAGE
+	if [ "$MAGENTO_B2B" == "yes" ]
+	then
+		echo -e "${COLOR}Activando B2B...${NC}"
+		composer require magento/extension-b2b
+	fi
 	php bin/magento setup:upgrade
+	php bin/magento setup:di:compile
+	php bin/magento setup:static-content:deploy
 	find . -type d -exec chmod 770 {} \; &&  find . -type f -exec chmod 660 {} \; &&  chmod u+x bin/magento
 	if [ "$MAGENTO_SAMPLE_DATA" == "yes" ]
 	then
