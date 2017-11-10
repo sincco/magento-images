@@ -78,3 +78,16 @@ su magento2
 ~~~
 ~/m2install.sh
 ~~~
+
+### Apache vhost (proxy)
+~~~
+<VirtualHost *:80>
+        ServerName magento2.net
+        ProxyPreserveHost On
+        ProxyRequests Off
+        ProxyPass / http://127.0.0.1:8001/
+        ProxyPassReverse / http://127.0.0.1:8001/
+        ErrorLog /var/www/magento2.dev.err
+        TransferLog /var/www/magento2.dev.log
+</VirtualHost>
+~~~
