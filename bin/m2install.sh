@@ -23,6 +23,7 @@ else
 	composer require obw/basictheme
 	composer require sincco/language-es_mx
 	composer require magepal/magento2-gmailsmtpapp
+
 	cp /root/.composer/auth.json ./auth.json
 	chown root:www-data /var/www/html -Rf
 	echo -e "${COLOR}Activando ObwHub...${NC}"
