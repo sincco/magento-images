@@ -17,17 +17,11 @@ else
 	composer install
 	echo -e "${COLOR}Instalando Magento2...${NC}"
 	php bin/magento setup:install --admin-firstname=admin --admin-lastname=admin --admin-email=$MAGENTO_ADMIN_EMAIL --admin-user=$MAGENTO_ADMIN_USER --admin-password=$MAGENTO_ADMIN_PASSWORD --db-host=$MAGENTO_DB_HOST --db-name=$MAGENTO_DB_NAME --db-user=$MAGENTO_DB_USERNAME --db-password=$MAGENTO_DB_PASSWORD --currency=$MAGENTO_CURRENCY --timezone=$MAGENTO_TIMEZONE --language=$MAGENTO_LANGUAGE --base-url=$MAGENTO_BASE_URL --backend-frontname=$MAGENTO_BACKEND_FRONTNAME
-	echo -e "${COLOR}Instalando ObwHub...${NC}"
-	composer require obw/hub
-	composer require obw/backendtheme
-	composer require obw/basictheme
 	composer require sincco/language-es_mx
 	composer require magepal/magento2-gmailsmtpapp
 
 	cp /root/.composer/auth.json ./auth.json
 	chown root:www-data /var/www/html -Rf
-	echo -e "${COLOR}Activando ObwHub...${NC}"
-	php bin/magento module:enable Obw_Hub
 	php bin/magento module:enable MagePal_GmailSmtpApp
 	echo -e "${COLOR}Configuraciones básicas...${NC}"
 	php bin/magento setup:store-config:set --use-rewrites=1 --language=$MAGENTO_LANGUAGE

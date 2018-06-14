@@ -1,4 +1,4 @@
-FROM php:7.0.12-fpm
+FROM php:7.1.3-fpm
 MAINTAINER "Ivan Miranda"
 
 ENV PHP_EXTRA_CONFIGURE_ARGS="--enable-fpm --with-fpm-user=magento2 --with-fpm-group=magento2"
@@ -108,10 +108,6 @@ RUN npm install -g express \
 
 RUN mkdir /home/magento2/.ssh \
     mkdir /home/magento2/.composer
-COPY keys/auth.json /home/magento2/.composer
-COPY keys/known_hosts /home/magento2/.ssh
-RUN chown magento2 /home/magento2/.ssh && \
-   chmod 600 /home/magento2/.ssh/known_hosts
 COPY bin/m2install.sh /home/magento2/
 COPY bin/composer_update /home/magento2/
 COPY bin/composer_update.sh /home/magento2/
